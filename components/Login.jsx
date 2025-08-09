@@ -1,17 +1,22 @@
+import React from "react";
+import GoogleLogin from './googleLogin'
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 function Login() {
-  return (
-   <>
-   <div className="w-full h-[40vh] flex justify-center items-center my-[20px]">
-        <div className="w-full bg-[#fde0e0] h-[90%] flex flex-col justify-around items-center p-[10px]">
-            <div className="flex justify-center bg-[#f55f5f] p-[1rem] rounded-2xl">
-                <h1 className="inter-500 text-white text-xl">Login or SignUp</h1>
+
+    return (
+        <>
+            <div className="w-full flex justify-center items-center my-[20px]">
+                <div className="w-full bg-[#fde0e0] h-[90%] flex flex-col justify-around items-center p-[20px]">
+                    <div className="flex justify-around w-full items-center">
+                        <GoogleOAuthProvider clientId="454588527993-vuo13jpg3s9vc78c5gjnjn2a6f7baifj.apps.googleusercontent.com">
+                            <GoogleLogin/>
+                        </GoogleOAuthProvider>
+                    </div>
+                </div>
             </div>
-            <div>
-                 <img src="./google.svg" alt=""  className="w-[50px] bg-white p-[0.5rem]"/>
-            </div>
-        </div>
-    </div></>
-  );
+        </>
+    );
 }
 
 export default Login;

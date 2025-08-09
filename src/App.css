@@ -10,9 +10,9 @@
 .strips{
     background-image: linear-gradient(90deg,
     white 0%, white 6%,
-    #fef6f6 6%, #fef6f6 46%,
-    white 46%, white 52%,
-    #fef6f6 52%, #fef6f6 94%,
-     white 94%, white 100%
+    #fef6f6 6%, #fef6f6 48.5%,
+    white 48.5%, white 49.5%,
+    #fef6f6 49.5%, #fef6f6 94%,
+    white 94%, white 100%
     );
 }

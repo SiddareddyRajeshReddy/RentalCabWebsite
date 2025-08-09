@@ -1,11 +1,12 @@
 import React from "react";
 import Search from "./search";
 import Login from "./Login";
+import ChooseUs from "./chooseUs";
+import ContactUs from "./contact";
+import Footer from "./footer";
 const Home = () => {
     return (
         <>
-            {/* <img className="sticky w-[10%] top-[16vw] right-0 z-2" src="./car.png" alt="" />
-                <img className="absolute w-[10%] top-[5vw] right-0 z-1" src="./bg.png" alt="" /> */}
             <div className="w-full min-h-screen strips">
                 <div className="flex flex-col justify-between min-h-screen">
                     <div className="relative flex justify-center gap-[4%] w-full h-screen">
@@ -33,6 +34,9 @@ const Home = () => {
                     </div>
                     <Search />
                     <Login/>
+                    <ChooseUs/>
+                    <ContactUs/>
+                    <Footer/>
                 </div>
             </div>
         </>
