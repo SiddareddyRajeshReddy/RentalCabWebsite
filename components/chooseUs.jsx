@@ -40,7 +40,7 @@ function ChooseUs() {
             <h4 className="text-[#FAB5B5] p-[8px]">ADVANTAGES</h4>
             <h2 className="text-[#807878] text-4xl p-[1px]">Why Choose Us ?</h2>
             <p className="text-[#C2BABA] text-sm p-[10px] w-[80vw] text-center">We present many guarantees and advantages when you rent a car with us for your trip. Here are some of the advantages that you will get</p>
-            <div className="grid grid-cols-2 grid-rows-2 md:grid-cols-3  md:grid-rows-2 gap-5 w-[80vw]"> 
+            <div className="grid grid-cols-1 grid-rows-1 sm:grid-cols-2 sm:grid-rows-2 md:grid-cols-3  md:grid-rows-2 gap-5 w-[80vw]"> 
                {adv.map((element, index) => (
                     <ChooseUsComponent key={index} prop={element} />
                ))}
