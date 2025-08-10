@@ -6,7 +6,7 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-10 w-[88%]">
           {/* Brand Info */}
           <div className="col-span-1">
-            <h2 className="text-3xl font-bold mb-4 text-[#f55f5f]">GRENN</h2>
+            <h2 className="text-3xl font-bold mb-4 text-[#f55f5f]">RCs</h2>
             <p className="text-[#AEA6A6] mb-6">
               We are a well-known car rental service that has many partners in each region to connect with you to assist in your trip in meetings, events, holidays or long trips.
             </p>
