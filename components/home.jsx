@@ -8,11 +8,9 @@ import Footer from "./footer";
 const Home = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [scrollY, setScrollY] = useState(0);
-    const [currentTestimonial, setCurrentTestimonial] = useState(0);
     const [showBookingForm, setShowBookingForm] = useState(false);
     const [selectedCarType, setSelectedCarType] = useState('economy');
 
-    // Handle scroll effects
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY);
         window.addEventListener('scroll', handleScroll);
@@ -48,7 +46,7 @@ const Home = () => {
                         <div className="flex justify-between items-center py-4">
                             {/* Logo */}
                             <div className="text-3xl font-bold text-red-500">
-                                RCs
+                                RCs... 🚕
                             </div>
 
                             {/* Desktop Navigation */}

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Eye, EyeOff, Mail, Lock, User, Phone, CheckCircle, AlertCircle } from 'lucide-react';
-
+import axios from 'axios'
 function AuthForm() {
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ function AuthForm() {
         name: '',
         phone: ''
     });
-    
+
     const [formErrors, setFormErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -29,43 +29,43 @@ function AuthForm() {
             if (/[^A-Za-z0-9]/.test(password)) strength += 1;
             return strength;
         };
-        
+
         setPasswordStrength(calculateStrength(formData.password));
     }, [formData.password]);
 
     // Form validation
     const validateForm = useCallback(() => {
         const errors = {};
-        
+
         // Email validation
         if (!formData.email.trim()) {
             errors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             errors.email = 'Please enter a valid email';
         }
-        
+
         // Password validation
         if (!formData.password) {
             errors.password = 'Password is required';
         } else if (formData.password.length < 8) {
             errors.password = 'Password must be at least 8 characters';
         }
-        
+
         // Signup specific validations
         if (!isLogin) {
             if (!formData.name.trim()) {
                 errors.name = 'Name is required';
             }
-            
+
             if (formData.password !== formData.confirmPassword) {
                 errors.confirmPassword = 'Passwords do not match';
             }
-            
+
             if (passwordStrength < 3) {
                 errors.password = 'Please choose a stronger password';
             }
         }
-        
+
         return errors;
     }, [formData, isLogin, passwordStrength]);
 
@@ -88,7 +88,7 @@ function AuthForm() {
             ...prev,
             [name]: value
         }));
-        
+
         // Clear error when user starts typing
         if (formErrors[name]) {
             setFormErrors(prev => ({
@@ -100,7 +100,7 @@ function AuthForm() {
 
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
-        
+
         const errors = validateForm();
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
@@ -108,19 +108,14 @@ function AuthForm() {
         }
 
         setIsSubmitting(true);
-        
+
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            console.log(isLogin ? 'Login' : 'Signup', formData);
-            setShowSuccess(true);
-            
-            setTimeout(() => {
-                setShowSuccess(false);
-                // Redirect logic would go here
-            }, 3000);
-            
+            const response = await axios.post('http://localhost:3000/AuthSignUp', formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            console.log(response)
         } catch (error) {
             console.error('Auth error:', error);
             setFormErrors({ submit: 'Something went wrong. Please try again.' });
@@ -131,7 +126,6 @@ function AuthForm() {
 
     const handleGoogleAuth = useCallback(() => {
         console.log('Google Auth triggered');
-        // Google OAuth logic would go here
     }, []);
 
     const getPasswordStrengthColor = () => {
@@ -162,7 +156,7 @@ function AuthForm() {
         <div className="w-full flex justify-center items-center py-12 bg-gradient-to-br from-red-50 via-pink-50 to-orange-50 min-h-screen">
             <div className="w-full max-w-md mx-auto px-4">
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                    
+
                     {/* Success Message */}
                     {showSuccess && (
                         <div className="p-4 bg-green-50 border-b border-green-200">
@@ -179,30 +173,27 @@ function AuthForm() {
                     <div className="flex relative">
                         <button
                             onClick={() => !isLogin && handleToggle()}
-                            className={`flex-1 py-5 text-center font-bold text-lg transition-all duration-500 relative z-10 ${
-                                isLogin 
-                                    ? 'text-white' 
+                            className={`flex-1 py-5 text-center font-bold text-lg transition-all duration-500 relative z-10 ${isLogin
+                                    ? 'text-white'
                                     : 'text-gray-600 hover:text-gray-800'
-                            }`}
+                                }`}
                         >
                             Login
                         </button>
                         <button
                             onClick={() => isLogin && handleToggle()}
-                            className={`flex-1 py-5 text-center font-bold text-lg transition-all duration-500 relative z-10 ${
-                                !isLogin 
-                                    ? 'text-white' 
+                            className={`flex-1 py-5 text-center font-bold text-lg transition-all duration-500 relative z-10 ${!isLogin
+                                    ? 'text-white'
                                     : 'text-gray-600 hover:text-gray-800'
-                            }`}
+                                }`}
                         >
                             Sign Up
                         </button>
-                        
+
                         {/* Sliding Background */}
-                        <div 
-                            className={`absolute top-0 h-full w-1/2 bg-gradient-to-r from-red-500 to-red-600 transition-transform duration-500 ease-in-out ${
-                                isLogin ? 'transform translate-x-0' : 'transform translate-x-full'
-                            }`}
+                        <div
+                            className={`absolute top-0 h-full w-1/2 bg-gradient-to-r from-red-500 to-red-600 transition-transform duration-500 ease-in-out ${isLogin ? 'transform translate-x-0' : 'transform translate-x-full'
+                                }`}
                         />
                     </div>
 
@@ -213,8 +204,8 @@ function AuthForm() {
                                 {isLogin ? 'Welcome Back!' : 'Join Us Today!'}
                             </h2>
                             <p className="text-gray-600">
-                                {isLogin 
-                                    ? 'Sign in to access your account' 
+                                {isLogin
+                                    ? 'Sign in to access your account'
                                     : 'Create your account to get started'
                                 }
                             </p>
@@ -243,9 +234,8 @@ function AuthForm() {
                                             placeholder="Enter your full name"
                                             value={formData.name}
                                             onChange={handleInputChange}
-                                            className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${
-                                                formErrors.name ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                                            }`}
+                                            className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${formErrors.name ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                                                }`}
                                         />
                                     </div>
                                     {formErrors.name && (
@@ -270,9 +260,8 @@ function AuthForm() {
                                         placeholder="Enter your email"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${
-                                            formErrors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                                        }`}
+                                        className={`w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${formErrors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                                            }`}
                                     />
                                 </div>
                                 {formErrors.email && (
@@ -316,9 +305,8 @@ function AuthForm() {
                                         placeholder="Enter your password"
                                         value={formData.password}
                                         onChange={handleInputChange}
-                                        className={`w-full pl-12 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${
-                                            formErrors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                                        }`}
+                                        className={`w-full pl-12 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${formErrors.password ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                                            }`}
                                     />
                                     <button
                                         type="button"
@@ -328,13 +316,13 @@ function AuthForm() {
                                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>
                                 </div>
-                                
+
                                 {/* Password Strength Indicator (Signup only) */}
                                 {!isLogin && formData.password && (
                                     <div className="mt-2">
                                         <div className="flex items-center gap-2 mb-1">
                                             <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div 
+                                                <div
                                                     className={`h-full transition-all duration-300 ${getPasswordStrengthColor()}`}
                                                     style={{ width: `${(passwordStrength / 5) * 100}%` }}
                                                 />
@@ -348,7 +336,7 @@ function AuthForm() {
                                         </p>
                                     </div>
                                 )}
-                                
+
                                 {formErrors.password && (
                                     <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
                                         <AlertCircle className="w-4 h-4" />
@@ -371,9 +359,8 @@ function AuthForm() {
                                             placeholder="Confirm your password"
                                             value={formData.confirmPassword}
                                             onChange={handleInputChange}
-                                            className={`w-full pl-12 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${
-                                                formErrors.confirmPassword ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                                            }`}
+                                            className={`w-full pl-12 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent transition-all text-gray-700 ${formErrors.confirmPassword ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                                                }`}
                                         />
                                         <button
                                             type="button"
