@@ -20,6 +20,15 @@ function AuthForm() {
     const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
+        if (showSuccess) {
+            const timer = setTimeout(() => {
+                setShowSuccess(false);
+            }, 4000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [showSuccess]);
+    useEffect(() => {
         const calculateStrength = (password) => {
             let strength = 0;
             if (password.length >= 8) strength += 1;
@@ -110,17 +119,34 @@ function AuthForm() {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('http://localhost:3000/AuthSignUp', formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            if (!isLogin) {
+                const response = await axios.post('http://localhost:3000/AuthSignUp', formData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            }
+            else{
+                const response = await axios.post('http://localhost:3000/AuthLogin', formData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            }
             console.log(response)
         } catch (error) {
             console.error('Auth error:', error);
             setFormErrors({ submit: 'Something went wrong. Please try again.' });
         } finally {
             setIsSubmitting(false);
+            setFormData({
+                email: '',
+                password: '',
+                confirmPassword: '',
+                name: '',
+                phone: ''
+            });
+            setShowSuccess(true)
         }
     }, [formData, validateForm, isLogin]);
 
@@ -159,12 +185,16 @@ function AuthForm() {
 
                     {/* Success Message */}
                     {showSuccess && (
-                        <div className="p-4 bg-green-50 border-b border-green-200">
-                            <div className="flex items-center gap-3 text-green-800">
-                                <CheckCircle className="w-5 h-5" />
-                                <span className="font-semibold">
-                                    {isLogin ? 'Login successful!' : 'Account created successfully!'}
-                                </span>
+                        <div className='relative'>
+                            <div className="p-4 bg-green-50">
+                                <div className="flex items-center gap-3 text-green-800">
+                                    <CheckCircle className="w-5 h-5" />
+                                    <span className="font-semibold">
+                                        {isLogin ? 'Login successful!' : 'Account created successfully!'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='sliding-animation bg-green-900 mar border-2 border-green-900 absolute bottom-0'>
                             </div>
                         </div>
                     )}
@@ -174,8 +204,8 @@ function AuthForm() {
                         <button
                             onClick={() => !isLogin && handleToggle()}
                             className={`flex-1 py-5 text-center font-bold text-lg transition-all duration-500 relative z-10 ${isLogin
-                                    ? 'text-white'
-                                    : 'text-gray-600 hover:text-gray-800'
+                                ? 'text-white'
+                                : 'text-gray-600 hover:text-gray-800'
                                 }`}
                         >
                             Login
@@ -183,8 +213,8 @@ function AuthForm() {
                         <button
                             onClick={() => isLogin && handleToggle()}
                             className={`flex-1 py-5 text-center font-bold text-lg transition-all duration-500 relative z-10 ${!isLogin
-                                    ? 'text-white'
-                                    : 'text-gray-600 hover:text-gray-800'
+                                ? 'text-white'
+                                : 'text-gray-600 hover:text-gray-800'
                                 }`}
                         >
                             Sign Up
@@ -421,7 +451,7 @@ function AuthForm() {
                                     <div className="w-full border-t border-gray-300" />
                                 </div>
                                 <div className="relative flex justify-center text-sm">
-                                    <span className="px-4 bg-white text-gray-500 font-semibold">Or continue with</span>
+                                    <span className="px-4 bg-white text-gray-500 font-semibold">Or continue with </span>
                                 </div>
                             </div>
                         </div>

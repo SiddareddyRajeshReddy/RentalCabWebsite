@@ -13,6 +13,7 @@ router.post('/AuthSignUp', async (req, res) => {
   try {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
+    console.log(existingUser)
     if (existingUser) {
       return res.status(400).json({ error: 'Email already in use' });
     }
@@ -31,4 +32,9 @@ router.post('/AuthSignUp', async (req, res) => {
   }
 });
 
+router.post('/AuthLogin', async (req, res)=>{
+    const {email, password} = req.body
+    const user = await User.findOne({email, password})
+    
+})
 export default router;

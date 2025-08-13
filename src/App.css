@@ -16,3 +16,18 @@
     white 94%, white 100%
     );
 }
+@keyframes setWidth {
+  from{
+    width: 100%;
+  }
+  to{
+    width: 0%;
+  }
+}
+.sliding-animation{
+  animation: setWidth;
+  animation-duration: 5000ms;
+  animation-delay: 0ms;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+}
